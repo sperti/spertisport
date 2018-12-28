@@ -17,17 +17,30 @@ export default class App extends React.Component {
       showTimer: false,
       buttonDisabled: true,
       training: false,
-      trainingBackground: 'white'
+      trainingBackground: 'white',
+      countdown: 5
     };
 
     this.startTraining = this.startTraining.bind(this);
+    this.countDownTraining = this.countDownTraining.bind(this);
   }
 
-  startTraining () {
+  countDownTraining () {
     if(this.state.training)
       return;
 
-    this.setState({training: true})
+    this.setState({training: true});
+
+    let countdown = setInterval(() => {
+      this.setState({countdown: this.state.countdown-1});
+      if(this.state.countdown == 0) {
+        this.startTraining();
+        clearInterval(countdown);
+      }
+    }, 1000);
+  }
+
+  startTraining () {
 
     let colors = [];
     if(this.state.red)
@@ -38,6 +51,8 @@ export default class App extends React.Component {
         colors.push("blue");
     if(this.state.yellow)
         colors.push("yellow");
+
+    this.setState({countdown: 'training'});
 
     let interval = setInterval(() =>{
       let random = Math.floor(Math.random() * colors.length); 
@@ -50,6 +65,7 @@ export default class App extends React.Component {
     setTimeout(() => {
       clearInterval(interval);
       this.setState({training: false})
+      this.setState({countdown: 5});
     }, this.state.duration*1000);
 
   }
@@ -112,12 +128,12 @@ export default class App extends React.Component {
           onPress={() => this.setState({yellow: !this.state.yellow})}
         />
 
-        { this.state.training && <View style={{position: 'absolute', zIndex: 2, backgroundColor: this.state.trainingBackground, left: 0, right: 0, bottom: 0, top: 0, flex: 1,flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}><Text>Countdown</Text></View> }
+        { this.state.training && <View style={{position: 'absolute', zIndex: 2, backgroundColor: this.state.trainingBackground, left: 0, right: 0, bottom: 0, top: 0, flex: 1,flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}><Text h1>{this.state.countdown}</Text></View> }
 
         <Button
           style={{height: 50}}
           disabled={!(this.state.red || this.state.green || this.state.blue || this.state.yellow)}
-          onPress={() => this.startTraining()}
+          onPress={() => this.countDownTraining()}
           title='Start Exercize'
         />
 

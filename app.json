@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "AwesomeProject",
-    "slug": "AwesomeProject",
+    "name": "Sperti Sport",
+    "slug": "SpertiSport",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,6 +22,13 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#1747e2"
+    },
+    "android": {
+      "package": "com.spertic.spertisport"
+    },
     "ios": {
       "supportsTablet": true
     }

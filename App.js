@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Input, Text, Header, CheckBox } from 'react-native-elements';
+import { View } from 'react-native';
+import { Button, Text, Header, CheckBox } from 'react-native-elements';
 import NumericInput from 'react-native-numeric-input';
 
 export default class App extends React.Component {

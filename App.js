@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Text, Header, CheckBox } from 'react-native-elements';
-import NumericInput from 'react-native-numeric-input';
+import { Button, Text, Header, CheckBox, Slider } from 'react-native-elements';
 import colors from './colors';
 
 
@@ -58,7 +57,6 @@ export default class App extends React.Component {
     let interval = setInterval(() =>{
       let keys = Array.from(this.state.checkedColors.keys());
       let random = Math.floor(Math.random() * keys.length);
-      console.log(keys[random]);
       this.setState({trainingBackground: keys[random]})
       setTimeout(() => {
         this.setState({trainingBackground: 'white'})
@@ -83,17 +81,37 @@ export default class App extends React.Component {
         background: 'white'
       }}>
         <Header
-          centerComponent={{ text: 'SPERTISPORT', style: { color: 'white' } }}
+          centerComponent={{ text: 'SPERTISPORT', style: { color: 'white', fontSize: 26 } }}
         />
 
-        <Text h2>Visual Training</Text>
+        <Text h4>Visual Training</Text>
 
-        <Text>Select training duration in seconds</Text>
-        <NumericInput rounded='true' initValue={this.state.duration} value={this.state.duration} minValue={10} maxValue={120} onChange={(duration) => this.setState({duration})} />
+        <Text style={{fontWeight: 'bold'}}>Select training duration</Text>
+        <Text>{this.state.duration} seconds</Text>
+        <Slider
+          style={{
+            width: '80%'
+          }}
+          value={this.state.duration}
+          minimumValue={10} 
+          maximumValue={120}
+          step={1}
+          onValueChange={(duration) => this.setState({duration})} />
         
-        <Text>Select training interval in seconds</Text>
-        <NumericInput rounded='true' initValue={this.state.interval} valueType='real' step={0.5} value={this.state.interval} minValue={1} maxValue={10} onChange={(interval) => this.setState({interval})} />
-    
+
+        <Text style={{fontWeight: 'bold'}}>Select training interval</Text>
+        <Text>{this.state.interval} seconds</Text>
+        <Slider
+          style={{
+            width: '80%'
+          }}
+          value={this.state.interval}
+          minimumValue={1}
+          step={0.5} 
+          maximumValue={10}
+          onValueChange={(interval) => this.setState({interval})} />
+          
+        
         <Text>Select colors you want</Text>
         <View style={{
           flexDirection: 'row',
@@ -103,12 +121,13 @@ export default class App extends React.Component {
           {
           colors.map(item => (
                 <CheckBox
+                  key={item.name}
                   checkedIcon='check-circle'
                   uncheckedIcon='circle'
                   checkedColor={item.name}
                   uncheckedColor={item.name}
                   checked={this.state.checkedColors.get(item.name)}
-                  onPress={(event) => this.handleChange(item.name)}
+                  onPress={() => this.handleChange(item.name)}
                   size={50}
                   style={{
                     margin: 3,
@@ -118,15 +137,22 @@ export default class App extends React.Component {
             ))
           }
         </View>
+
         { this.state.training && <View style={{position: 'absolute', zIndex: 2, backgroundColor: this.state.trainingBackground, left: 0, right: 0, bottom: 0, top: 0, flex: 1,flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}><Text h1>{this.state.countdown}</Text></View> }
 
         <Button
-          style={{height: 50}}
+          style={{
+            height: 100,
+            width: 300,
+            padding: 20,
+            opacity: (this.state.training) ? 0 : 1,
+          }}
           disabled={this.state.checkedColors.size == 0}
           onPress={() => this.countDownTraining()}
           title='Start Exercize'
         />
 
+        
       </View>
     );
   }

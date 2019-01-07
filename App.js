@@ -2,6 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { Button, Text, Header, CheckBox } from 'react-native-elements';
 import NumericInput from 'react-native-numeric-input';
+import colors from './colors';
+
 
 export default class App extends React.Component {
 
@@ -10,10 +12,7 @@ export default class App extends React.Component {
     this.state = {
       duration: 30,
       interval: 3,
-      red: false,
-      green: false,
-      blue: false,
-      yellow: false,
+      checkedColors: new Map(),
       showTimer: false,
       buttonDisabled: true,
       training: false,
@@ -23,6 +22,18 @@ export default class App extends React.Component {
 
     this.startTraining = this.startTraining.bind(this);
     this.countDownTraining = this.countDownTraining.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(color) {
+    let colors = this.state.checkedColors;
+    if(colors.has(color)) {
+      colors.delete(color);
+    } else {
+      colors.set(color, true);
+    }
+
+    this.setState({ checkedColors: colors });
   }
 
   countDownTraining () {
@@ -42,21 +53,13 @@ export default class App extends React.Component {
 
   startTraining () {
 
-    let colors = [];
-    if(this.state.red)
-        colors.push("red");
-    if(this.state.green)
-        colors.push("green");
-    if(this.state.blue)
-        colors.push("blue");
-    if(this.state.yellow)
-        colors.push("yellow");
-
-    this.setState({countdown: 'training'});
+    this.setState({countdown: 'Training...'});
 
     let interval = setInterval(() =>{
-      let random = Math.floor(Math.random() * colors.length); 
-      this.setState({trainingBackground: colors[random]})
+      let keys = Array.from(this.state.checkedColors.keys());
+      let random = Math.floor(Math.random() * keys.length);
+      console.log(keys[random]);
+      this.setState({trainingBackground: keys[random]})
       setTimeout(() => {
         this.setState({trainingBackground: 'white'})
       }, 500);
@@ -77,6 +80,7 @@ export default class App extends React.Component {
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
+        background: 'white'
       }}>
         <Header
           centerComponent={{ text: 'SPERTISPORT', style: { color: 'white' } }}
@@ -91,48 +95,34 @@ export default class App extends React.Component {
         <NumericInput rounded='true' initValue={this.state.interval} valueType='real' step={0.5} value={this.state.interval} minValue={1} maxValue={10} onChange={(interval) => this.setState({interval})} />
     
         <Text>Select colors you want</Text>
-        <CheckBox
-          title='Red'
-  checkedIcon='check-circle'
-  uncheckedIcon='circle'
-          checkedColor='red'
-          uncheckedColor='red'
-          checked={this.state.red}
-          onPress={() => this.setState({red: !this.state.red})}
-        />
-        <CheckBox
-          title='Green'
-  checkedIcon='check-circle'
-  uncheckedIcon='circle'
-          checkedColor='green'
-          uncheckedColor='green'
-          checked={this.state.green}
-          onPress={() => this.setState({green: !this.state.green})}
-        />
-        <CheckBox
-          title='Blue'
-  checkedIcon='check-circle'
-  uncheckedIcon='circle'
-          checkedColor='blue'
-          uncheckedColor='blue'
-          checked={this.state.blue}
-          onPress={() => this.setState({blue: !this.state.blue})}
-        />
-        <CheckBox
-          title='Yellow'
-  checkedIcon='check-circle'
-  uncheckedIcon='circle'
-          checkedColor='yellow'
-          uncheckedColor='yellow'
-          checked={this.state.yellow}
-          onPress={() => this.setState({yellow: !this.state.yellow})}
-        />
-
+        <View style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+        }}>
+          {
+          colors.map(item => (
+                <CheckBox
+                  checkedIcon='check-circle'
+                  uncheckedIcon='circle'
+                  checkedColor={item.name}
+                  uncheckedColor={item.name}
+                  checked={this.state.checkedColors.get(item.name)}
+                  onPress={(event) => this.handleChange(item.name)}
+                  size={50}
+                  style={{
+                    margin: 3,
+                    width: 100
+                  }}
+                />
+            ))
+          }
+        </View>
         { this.state.training && <View style={{position: 'absolute', zIndex: 2, backgroundColor: this.state.trainingBackground, left: 0, right: 0, bottom: 0, top: 0, flex: 1,flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}><Text h1>{this.state.countdown}</Text></View> }
 
         <Button
           style={{height: 50}}
-          disabled={!(this.state.red || this.state.green || this.state.blue || this.state.yellow)}
+          disabled={this.state.checkedColors.size == 0}
           onPress={() => this.countDownTraining()}
           title='Start Exercize'
         />

@@ -1,9 +1,9 @@
 {
-  "devToolsPort": 19002,
-  "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 16516,
-  "expoServerNgrokUrl": "https://hs-yvr.spertic.spertisport.exp.direct",
-  "packagerNgrokUrl": "https://packager.hs-yvr.spertic.spertisport.exp.direct",
-  "ngrokPid": 18036
+  "packagerPid": 10212,
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://t9-t64.spertic.spertisport.exp.direct",
+  "packagerNgrokUrl": "https://packager.t9-t64.spertic.spertisport.exp.direct",
+  "ngrokPid": 13288,
+  "devToolsPort": 19002
 }

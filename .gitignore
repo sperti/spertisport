@@ -1,1 +1,9 @@
-node_modules
+node_modules/**/*
+.expo/*
+npm-debug.*
+*.jks
+*.p12
+*.key
+*.mobileprovision
+/Color.jsx
+/colorContainer.jsx
